@@ -27,8 +27,14 @@ ActiveRecord::Schema.define(version: 2021_03_18_121323) do
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
+    t.string "nickname"
+    t.string "full_name"
     t.string "email"
+    t.string "mobile_number"
+    t.string "nationality"
+    t.integer "status", default: 0
+    t.boolean "is_verified_mobile_number", default: false
+    t.boolean "is_verified_email", default: false
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
