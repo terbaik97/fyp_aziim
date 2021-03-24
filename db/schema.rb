@@ -10,11 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_18_121323) do
+ActiveRecord::Schema.define(version: 2021_03_22_175318) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "pois", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "user_id"
+    t.string "action_id"
+    t.json "fields"
+    t.point "coordinate"
+    t.string "subcategory_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "roles", force: :cascade do |t|
     t.string "name"
@@ -24,6 +34,15 @@ ActiveRecord::Schema.define(version: 2021_03_18_121323) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
+  end
+
+  create_table "user_actions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "user_id"
+    t.string "poi_id"
+    t.string "action_user"
+    t.integer "status", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -56,6 +75,42 @@ ActiveRecord::Schema.define(version: 2021_03_18_121323) do
     t.text "object"
     t.datetime "created_at"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  end
+
+  create_table "versions_poi", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "item_type", null: false
+    t.string "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.json "object_changes"
+    t.json "object"
+    t.datetime "created_at"
+    t.index ["created_at"], name: "index_versions_poi_on_created_at"
+    t.index ["item_type", "item_id"], name: "idx_versions_poi_on_item"
+  end
+
+  create_table "versions_user", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "item_type", null: false
+    t.string "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.json "object_changes"
+    t.json "object"
+    t.datetime "created_at"
+    t.index ["created_at"], name: "index_versions_user_on_created_at"
+    t.index ["item_type", "item_id"], name: "idx_versions_user_on_item"
+  end
+
+  create_table "versions_user_action", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "item_type", null: false
+    t.string "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.json "object_changes"
+    t.json "object"
+    t.datetime "created_at"
+    t.index ["created_at"], name: "index_versions_user_action_on_created_at"
+    t.index ["item_type", "item_id"], name: "idx_versions_user_action_on_item"
   end
 
 end
