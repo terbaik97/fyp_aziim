@@ -1,7 +1,7 @@
 class User < ApplicationRecord
     rolify
     has_secure_password
-    has_paper_trail
+    has_paper_trail versions: { class_name: "PaperTrail::UserVersion" }
   
     PASSWORD_REQUIREMENTS = /\A
       (?=.{8,})
@@ -18,5 +18,7 @@ class User < ApplicationRecord
     # validates :email, uniqueness: true
     validates_presence_of  :email, :password_digest
 
-    has_many :user_actions , foreign_key: :user_id, class_name: 'UserAction'
+    has_many :user_actions 
+  
+    
 end
