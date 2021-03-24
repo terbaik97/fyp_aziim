@@ -9,14 +9,14 @@ resources :app_configs, only: [] do
   end
 end
 
-# resources :pois, only: [] do
-#   collection do
-#     get :index 
-#     get :new 
-#     post :create 
-#     put :update 
-#     delete :delete
-#   end
-# end
+resources :pois, only: [] do
+  collection do
+    get :index
+    post :create
+    put 'update'
+    get 'show_version/:id', to: 'pois#show_version'
+    get 'show/:id', to: 'pois#show'
+  end
+end
 
-resource :pois, only: [:show, :update, :destroy , :create , :index]
+# resource :pois, only: [:show, :update, :destroy , :create , :index]
