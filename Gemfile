@@ -41,3 +41,13 @@ gem "rolify"
 gem 'paper_trail'
 
 gem 'jwt'
+
+gem 'carrierwave', '~> 2.2'
+
+gem 'carrierwave-aws', '~> 1.5'
+
+gem 'dotenv-rails', '~> 2.7', '>= 2.7.6'
+
+gem 'mini_magick', '~> 4.11'
+
+gem 'active_model_serializers', '~> 0.10.12'
