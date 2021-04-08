@@ -14,9 +14,9 @@ resources :pois, only: [] do
     get :index
     post :create
     put 'update'
-    get 'show_version/:id', to: 'pois#show_version'
-    get 'show/:id', to: 'pois#show'
+    get 'show_version/:name', to: 'pois#show_version'
+    get 'show', to: 'pois#show'
   end
 end
 
-# resource :pois, only: [:show, :update, :destroy , :create , :index]
+resources :category
