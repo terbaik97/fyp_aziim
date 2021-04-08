@@ -15,7 +15,7 @@ class User < ApplicationRecord
     # validates_presence_of :email, :password_digest
     # # validates :password, format: PASSWORD_REQUIREMENTS
     # validates :password
-    # validates :email, uniqueness: true
+    validates :email, uniqueness: true
     validates_presence_of  :email, :password_digest
 
     has_many :user_actions 
