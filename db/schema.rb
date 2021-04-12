@@ -29,9 +29,11 @@ ActiveRecord::Schema.define(version: 2021_03_25_014046) do
     t.string "name"
     t.string "subcategory_id"
     t.json "fields"
-    t.point "coordinate"
+    t.decimal "poi_latitude", precision: 10, scale: 6
+    t.decimal "poi_longitude", precision: 10, scale: 6
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["poi_latitude", "poi_longitude"], name: "index_pois_on_poi_latitude_and_poi_longitude"
   end
 
   create_table "roles", force: :cascade do |t|

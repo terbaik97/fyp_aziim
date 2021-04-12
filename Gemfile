@@ -51,3 +51,5 @@ gem 'dotenv-rails', '~> 2.7', '>= 2.7.6'
 gem 'mini_magick', '~> 4.11'
 
 gem 'active_model_serializers', '~> 0.10.12'
+
+gem 'geokit-rails'

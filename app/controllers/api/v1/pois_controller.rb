@@ -5,16 +5,19 @@ module Api
             before_action :set_paper_trail_whodunnit
            
             def index
-              # return all user search for place
-              all_poi = Poi.all()
-              render json: all_poi
+              find_poi_coordinate =Poi.by_distance(:origin => [params[:poi_latitude],params[:poi_longitude]])
+              # byebug
+              results = find_poi_coordinate.where(:name => params[:name])
+              json_response(
+               data: results
+              )
+              
             end
 
             def create
               if request.headers["Authorization"].present?
                 authorize_request
                 create_poi = Poi.new(:user_id => authorize_request.id ,:name => params[:name] , :fields => params[:fields] , :coordinate => params[:coordinate ])
-                # create_poi.user_actions.build(action_user: "create", user_id: authorize_request.id)
                 if create_poi.save
                   user_action = UserAction.new(action_user: "create", user_id: authorize_request.id , poi_id: create_poi.id)
                   user_action.save
@@ -49,19 +52,15 @@ module Api
                     message: return_msg
                   )
               else
-                find_poi_by_name = Poi.find_by(coordinate: params[:search]) 
-                # find_poi_by_coordinate = Poi.find_by(coordinate: params[:name])
-                byebug
-                if find_poi
-                  json_response(
-                    data: Serializers::Poi::Show.hash(find_poi)
-                  )  
+               
+                find_poi_coordinate =Poi.by_distance(:origin => [params[:poi_latitude],params[:poi_longitude]])
+                results = find_poi_coordinate.find_by(:name => params[:name])
+                if results
+                  render json: results
                 else
                   not_found(params[:name])
                 end
               end
-
-              
             end
 
             def show_version
