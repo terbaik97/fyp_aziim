@@ -12,11 +12,21 @@ module Api
                   end
                 return_msg = 'Successfully created your account'
                 json_response(
-                    # data: user_data,
+                    data: user_data,
                     message: return_msg
                   )
             end
 
+            def show
+              
+              user = User.where(email: params[:email])
+              json_response(
+                # data: user_data,
+                data: user
+              )
+            rescue StandardError => ex
+              return json_response(message: ex.message, status: :unprocessable_entity)
+            end
             private
         
             def signup_params
