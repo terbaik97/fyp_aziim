@@ -1,6 +1,7 @@
 class Poi < ApplicationRecord
   has_paper_trail versions: { class_name: "PaperTrail::PoiVersion" }
   has_many :user_actions
+  has_many :image_pois
   validates_presence_of  :name
   acts_as_mappable  :default_units => :miles,
                     :default_formula => :sphere,
