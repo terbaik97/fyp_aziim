@@ -33,8 +33,6 @@ module Api
         end
       end
       
-     
-
       private
         def signup_params
           params.permit(

@@ -4,7 +4,8 @@ module Serializers::Poi::Show
         {
           
           name: poi.name,
-          coordinate: poi.coordinate,
+          poi_latitude: poi.poi_latitude,
+          poi_longitude: poi.poi_longitude,
           user_id: poi.user_id,
           created_at: poi.created_at,
           fields: poi.fields

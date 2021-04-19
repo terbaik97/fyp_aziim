@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_25_014046) do
+ActiveRecord::Schema.define(version: 2021_04_13_032241) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -23,15 +23,24 @@ ActiveRecord::Schema.define(version: 2021_03_25_014046) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "image_pois", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "poi_id"
+    t.json "images"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "pois", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "user_id"
     t.string "action_id"
     t.string "name"
     t.string "subcategory_id"
     t.json "fields"
-    t.point "coordinate"
+    t.decimal "poi_latitude", precision: 10, scale: 6
+    t.decimal "poi_longitude", precision: 10, scale: 6
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["poi_latitude", "poi_longitude"], name: "index_pois_on_poi_latitude_and_poi_longitude"
   end
 
   create_table "roles", force: :cascade do |t|
