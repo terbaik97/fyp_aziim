@@ -84,7 +84,7 @@ GEM
     aws-sigv4 (1.2.3)
       aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.16)
-    bootsnap (1.7.2)
+    bootsnap (1.7.3)
       msgpack (~> 1.0)
     builder (3.2.4)
     byebug (11.1.3)
@@ -210,7 +210,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers (~> 0.10.12)
   bcrypt (~> 3.1.7)
-  bootsnap (>= 1.4.4)
+  bootsnap (~> 1.1, >= 1.1.7)
   byebug
   carrierwave (~> 2.2)
   carrierwave-aws (~> 1.5)

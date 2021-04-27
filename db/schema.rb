@@ -25,7 +25,9 @@ ActiveRecord::Schema.define(version: 2021_04_13_032241) do
 
   create_table "image_pois", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "poi_id"
-    t.json "images"
+    t.string "image"
+    t.string "name"
+    t.string "size"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -36,6 +38,8 @@ ActiveRecord::Schema.define(version: 2021_04_13_032241) do
     t.string "name"
     t.string "subcategory_id"
     t.json "fields"
+    t.string "is_report"
+    t.string "report_reason"
     t.decimal "poi_latitude", precision: 10, scale: 6
     t.decimal "poi_longitude", precision: 10, scale: 6
     t.datetime "created_at", precision: 6, null: false

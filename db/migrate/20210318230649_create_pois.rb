@@ -6,6 +6,8 @@ class CreatePois < ActiveRecord::Migration[6.1]
       t.string :name
       t.string :subcategory_id
       t.json :fields
+      t.string :is_report
+      t.string :report_reason
       t.decimal :poi_latitude, precision: 10, scale: 6
       t.decimal :poi_longitude, precision: 10, scale: 6
       
