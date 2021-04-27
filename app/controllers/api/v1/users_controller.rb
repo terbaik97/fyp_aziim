@@ -10,7 +10,7 @@ module Api
                 if !user.save
                     return json_response(message: user.errors.full_messages, status: :unprocessable_entity)
                   end
-                return_msg = 'Successfully created your account'
+                return_msg = "Successfully created your account"
                 json_response(
                     data: user_data,
                     message: return_msg
@@ -22,7 +22,8 @@ module Api
               user = User.where(email: params[:email])
               json_response(
                 # data: user_data,
-                data: user
+                data: user,
+                message: "Successfully login"
               )
             rescue StandardError => ex
               return json_response(message: ex.message, status: :unprocessable_entity)
