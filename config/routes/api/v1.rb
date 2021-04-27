@@ -17,6 +17,7 @@ resources :pois, only: [] do
     put 'update'
     get 'show_version/:id', to: 'pois#show_version'
     get 'show', to: 'pois#show'
+    get 'show_poi/:id', to: 'pois#show_poi'
     get 'show/coordinate', to: 'pois#show_coordinate'
   end
 end
@@ -24,3 +25,5 @@ end
 resources :category
 
 resources :image_poi
+
+resources :report
