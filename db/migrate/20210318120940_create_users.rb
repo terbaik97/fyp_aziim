@@ -8,6 +8,7 @@ class CreateUsers < ActiveRecord::Migration[6.1]
       t.string :nationality
       t.integer :status, :default => 0
       t.integer :user_point, :default => 100
+      t.string :avatar
       t.boolean :is_verified_mobile_number, default: false
       t.boolean :is_verified_email, default: false
       t.string :password_digest
