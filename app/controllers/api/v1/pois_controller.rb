@@ -61,14 +61,24 @@ module Api
 
             def update
               update_poi = Poi.find(params[:poi_id])
-              if update_poi.update(
-                :name => params[:name] , 
-                :fields => params[:fields] ,
-                :poi_latitude => params[:poi_latitude ],
-                :poi_longitude => params[:poi_longitude ] )
+              if  update_poi
+                byebug
+                # #only update exist value
+                if params[:name].present?
+                update_poi.update(:name => params[:name])
+                end
+                if params[:fields].values_at.present?
+                update_poi.update(:fields => params[:fields])
+                end
+                if params[:poi_latitude].present?
+                update_poi.update(:poi_latitude => params[:poi_latitude])
+                end
+                if params[:poi_longitude].present?
+                update_poi.update(:poi_longitude => params[:poi_longitude])
+                end
+                
                 user_action = UserAction.new(action_user: "update", user_id: authorize_request.id , poi_id: update_poi.id)
                 user_action.save
-                # render json: update_poi
                 found(update_poi,"Succesfully update poi")
               else
                 return_msg = 'Not successfully update poi'
@@ -94,8 +104,14 @@ module Api
                   if check_report_results.nil?
                     
                     results = Poi.find_by(poi_latitude: params[:poi_latitude], poi_longitude: params[:poi_longitude])
+                  
+                    results_image = ImagePoi.find_by(poi_id: results.id)
                     
-                    render json: results 
+                    render json: results.to_json(
+                      :include => {
+                        :image_pois => {only: [:name,:base_64,:image]}, 
+                        
+                      })
                   else
                     live_widget = Poi.find_by(id: check_report_results.id)
                     live_widget.versions.length  
@@ -129,12 +145,11 @@ module Api
             end
 
             def show_version 
-              # byebug
+             
               find_poi = Poi.find(params[:id])
-              # byebug
+              results_user_action= Poi.find(params[:id])
               if find_poi
-                
-                render json: find_poi.versions    
+                   render json:  find_poi.versions
               else
                 not_found(params[:name])
               end
@@ -172,9 +187,9 @@ module Api
                   message: message
                 )  
             end
-            # def previous_version(id)
-            #   byebug
-            # end
+            def user_for_paper_trail
+              current_user&.full_name || "Public User"
+            end
         end
     end
 end
