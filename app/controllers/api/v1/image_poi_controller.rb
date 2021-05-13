@@ -21,12 +21,15 @@ module Api
             end
 
             def update
-              
-                image_poi = ImagePoi.find_by(poi_id: params[:poi_id])
+             
+              image_poi = ImagePoi.find_by(poi_id: params[:poi_id])
                 
-              if image_poi.update(image_poi_params)
+              # if image_poi.update(image_poi_params)
 
-                render json: image_poi
+              #   render json: image_poi
+
+              if params[:image].present?
+                image_poi.update(:image => params[:image])   
               else
                 render json: { errors: image_poi.errors }, status: 400
               end
@@ -50,6 +53,7 @@ module Api
                 :name,
                 :size,
                 :image,
+                :base_64
                 
                  )
             end
