@@ -3,7 +3,7 @@ class User < ApplicationRecord
     has_secure_password
     has_paper_trail versions: { class_name: "PaperTrail::UserVersion" }
   
-    mount_uploader :image, UserUploader
+    mount_uploader :avatar, UserUploader
 
     PASSWORD_REQUIREMENTS = /\A
       (?=.{8,})
