@@ -5,6 +5,9 @@ class CreatePois < ActiveRecord::Migration[6.1]
       t.string :action_id
       t.string :name
       t.string :subcategory_id
+      t.string :category
+      t.string :event
+      t.string :event_date
       t.json :fields
       t.string :is_report
       t.string :report_reason

@@ -20,7 +20,7 @@ module PaperTrail
     include PaperTrail::VersionConcern
     self.abstract_class = true
 
-    belongs_to :operator, class_name: '::User', foreign_key: :whodunnit, optional: true
+    belongs_to :user, class_name: '::User', foreign_key: :whodunnit, optional: true
 
     # Create new version table for new item_type
     #
