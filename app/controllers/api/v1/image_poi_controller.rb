@@ -4,32 +4,35 @@ module Api
             skip_before_action :authorize_request
             before_action :set_paper_trail_whodunnit
             def index
-              all_category = Category.all()
-              render json: all_category
+              all_image = PoiImage.all()
+              render json: all_image
             end
 
             def create
 
-                # category = Category.new(:category_name => params[:category_name] ,:image => params[:image] )
-                category = ImagePoi.new(image_poi_params)
-                
-                if category.valid?
-                    
-                    category.save
-                    render json: category
+                image = ImagePoi.new(image_poi_params)
+
+                if image.valid?
+                    image.save
+                    render json: image
                   else
-                    # render json: { errors: category.errors }, status: 400
-                    render_error(category.errors.full_messages[0], :unprocessable_entity)
+                    render_error(image.errors.full_messages[0], :unprocessable_entity)
                   end
             end
 
             def update
-              if category.update(category_params)
-                render json: category
-              else
-                render json: { errors: category.errors }, status: 400
-              end
              
+              image_poi = ImagePoi.find_by(poi_id: params[:poi_id])
+                
+              # if image_poi.update(image_poi_params)
+
+              #   render json: image_poi
+
+              if params[:image].present?
+                image_poi.update(:image => params[:image])   
+              else
+                render json: { errors: image_poi.errors }, status: 400
+              end
             end
 
             def show
@@ -40,17 +43,21 @@ module Api
             private
 
             def find_category
-              category = Category.find(params[:category_name])
+              image = ImagePoi.find(params[:poi_id])
             end
 
             def image_poi_params
                 
                 params.permit(
                 :poi_id,
-                {images: []}
+                :name,
+                :size,
+                :image,
+                :base_64
+                
                  )
             end
-
+         
             
         
             

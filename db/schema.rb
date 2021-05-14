@@ -25,7 +25,10 @@ ActiveRecord::Schema.define(version: 2021_04_13_032241) do
 
   create_table "image_pois", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "poi_id"
-    t.json "images"
+    t.string "image"
+    t.text "name"
+    t.text "base_64"
+    t.string "size"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -35,7 +38,12 @@ ActiveRecord::Schema.define(version: 2021_04_13_032241) do
     t.string "action_id"
     t.string "name"
     t.string "subcategory_id"
+    t.string "category"
+    t.string "event"
+    t.string "event_date"
     t.json "fields"
+    t.string "is_report"
+    t.string "report_reason"
     t.decimal "poi_latitude", precision: 10, scale: 6
     t.decimal "poi_longitude", precision: 10, scale: 6
     t.datetime "created_at", precision: 6, null: false
@@ -69,6 +77,8 @@ ActiveRecord::Schema.define(version: 2021_04_13_032241) do
     t.string "mobile_number"
     t.string "nationality"
     t.integer "status", default: 0
+    t.integer "user_point", default: 100
+    t.string "avatar"
     t.boolean "is_verified_mobile_number", default: false
     t.boolean "is_verified_email", default: false
     t.string "password_digest"
