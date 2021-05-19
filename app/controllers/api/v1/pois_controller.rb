@@ -30,11 +30,15 @@ module Api
             def create
               if request.headers["Authorization"].present?
                 authorize_request
-                create_poi = Poi.new(:user_id => authorize_request.id ,
-                :name => params[:name] , 
-                :fields => params[:fields] ,
-                :poi_latitude => params[:poi_latitude ],
-                :poi_longitude => params[:poi_longitude ])
+                create_poi = Poi.new(
+                  :user_id => authorize_request.id ,
+                  :name => params[:name] , 
+                  :fields => params[:fields] ,
+                  :poi_latitude => params[:poi_latitude ],
+                  :poi_longitude => params[:poi_longitude],
+                  :event => params[:event],
+                  :event_date => params[:event_date]
+                )
                 if create_poi.save
                   user_action = UserAction.new(action_user: "create", user_id: authorize_request.id , poi_id: create_poi.id)
                   
@@ -62,7 +66,7 @@ module Api
             def update
               update_poi = Poi.find(params[:poi_id])
               if  update_poi
-                byebug
+                
                 # #only update exist value
                 if params[:name].present?
                 update_poi.update(:name => params[:name])
@@ -76,7 +80,13 @@ module Api
                 if params[:poi_longitude].present?
                 update_poi.update(:poi_longitude => params[:poi_longitude])
                 end
-                
+                if params[:event].present?
+                  update_poi.update(:event => params[:event])
+                end
+                if params[:event_date].present?
+                  update_poi.update(:event_date => params[:event_date])
+                end
+
                 user_action = UserAction.new(action_user: "update", user_id: authorize_request.id , poi_id: update_poi.id)
                 user_action.save
                 found(update_poi,"Succesfully update poi")
