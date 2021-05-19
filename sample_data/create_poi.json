@@ -1,0 +1,25 @@
+{ 
+    "place_1": {
+        "fields": 
+        {
+        "name" : "Kafeteria Canceleri",
+        "rating" : 4.5,
+        "website" : "https://www.google.com/imghp?hl=EN",
+        "address" : "Baktisiswa, 50603 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur",
+        "phone_number" : "(02) 9374 4000"
+        },  
+        "coordinate": "3.1189135014848364, 101.65991838090626"
+                },
+    "place_2": {
+        "fields":  
+        {
+            "name" : "Varsiti Sukan Universiti Malaya",
+            "rating" : 4.5,
+            "website" : "https://www.google.com/imghp?hl=EN",
+            "address" : "Lingkungan Budi, 50603 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur",
+            "phone_number" : "(02) 9374 4000"
+        },
+        "coordinate": "3.119410357823462, 101.6593442345535"
+                }
+
+    }

@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.6'
+ruby '2.6.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.1.3'
@@ -20,7 +20,8 @@ gem 'bcrypt', '~> 3.1.7'
 # gem 'image_processing', '~> 1.2'
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.4.4', require: false
+gem 'bootsnap', '~> 1.1', '>= 1.1.7' , require: false
+# gem 'bootsnap', require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
@@ -41,3 +42,19 @@ gem "rolify"
 gem 'paper_trail'
 
 gem 'jwt'
+
+gem 'carrierwave', '~> 2.2'
+
+gem 'carrierwave-aws', '~> 1.5'
+
+gem 'dotenv-rails', '~> 2.7', '>= 2.7.6'
+
+gem 'mini_magick', '~> 4.11'
+
+gem 'active_model_serializers', '~> 0.10.12'
+
+gem 'geokit-rails'
+
+gem 'carrierwave-base64'
+
+gem 'mime-types', require: 'mime/types/full'

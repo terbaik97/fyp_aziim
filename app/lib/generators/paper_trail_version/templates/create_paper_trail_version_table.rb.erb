@@ -1,0 +1,6 @@
+class <%= migration_class_name %> < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
+    def change
+      PaperTrail::Version.migrate_new_item_type(self, '<%= @item_class_name %>')
+    end
+  end
+  
