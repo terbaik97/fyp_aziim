@@ -21,7 +21,6 @@ module Api
       def login(msg='')
         
         begin
-          # byebug
           user_data = Services::Auth::AuthenticateUser.call!(login_params[:email], login_params[:password]).data
           return_msg = msg.present? ? msg : 'Successfully logged in'
 

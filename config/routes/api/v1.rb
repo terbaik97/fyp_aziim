@@ -1,6 +1,7 @@
 post "/login", to: "auth#login"
 post "/sign-up", to: "auth#sign_up"
 post "/create", to: "users#create"
+put "/update", to: "users#update"
 get "/show", to: "users#show"
 
 
