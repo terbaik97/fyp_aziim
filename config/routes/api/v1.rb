@@ -28,3 +28,8 @@ resources :category
 resources :image_poi
 
 resources :report
+
+get "/user_actions", to: "user_actions#user_action"
+put "/user_point", to: "user_actions#user_point"
+put "/user_point/add", to: "user_actions#add_user_point"
+put "/user_point/subtract", to: "user_actions#subtract_user_point"
