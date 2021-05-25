@@ -67,6 +67,9 @@ module Api
                   message: message
                 )  
             end
+            def user_for_paper_trail
+              current_user&.full_name 
+            end
         end
     end
 end
