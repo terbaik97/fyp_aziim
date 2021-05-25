@@ -10,21 +10,7 @@ module Api
                  json_response(
                     data: poi
                   )
-              # if params.nil?
-              #   json_response(
-              #     data: "Please input place you want to find"
-              # )
-              # else
-              #   poi = Poi.find_by(:name => params[:name]);
-              #   json_response(
-              #       data: poi
-              #     )
-              # end
-              # find_poi_coordinate =Poi.by_distance(:origin => [params[:poi_latitude],params[:poi_longitude]])
-              # results = find_poi_coordinate.find_by(:name => params[:name])
-              # json_response(
-              #  data: find_poi_coordinate
-              # )
+              
             end
 
             def create
@@ -67,7 +53,7 @@ module Api
               update_poi = Poi.find(params[:poi_id])
               if  update_poi
                 
-                # #only update exist value
+                #only update exist value
                 if params[:name].present?
                 update_poi.update(:name => params[:name])
                 end
@@ -136,16 +122,6 @@ module Api
                       live_widget.destroy
                     
                     end
-                    # # CREATE FIRST TIME AND GOT ISSUE REVERT BACK TO NEW ONE
-                    # widget =  live_widget.paper_trail.next_version          # => widget == live_widget.versions.last.reify
-                     
-                    # render json: widget.versions.first
-
-
-                    # byebug
-                    # check_report_results = check_report_results.paper_trail.previous_version  # the widget as it was before the update
-                    # check_report_results.save                                                 # reverted
-                    # render json: check_report_results 
                     
                   end
                 else
@@ -176,8 +152,8 @@ module Api
 
             def search
               #  buat utk search
-                # find_poi_coordinate =Poi.by_distance(:origin => [params[:poi_latitude],params[:poi_longitude]])
-                # results = find_poi_coordinate.find_by(:name => params[:name])
+                find_poi_coordinate =Poi.by_distance(:origin => [params[:poi_latitude],params[:poi_longitude]])
+                results = find_poi_coordinate.find_by(:name => params[:name])
             end
             private
             def poi_params 
@@ -198,7 +174,7 @@ module Api
                 )  
             end
             def user_for_paper_trail
-              current_user&.full_name || "Public User"
+              current_user&.full_name 
             end
         end
     end
