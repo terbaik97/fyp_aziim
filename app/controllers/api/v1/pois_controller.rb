@@ -51,13 +51,14 @@ module Api
 
             def update
               update_poi = Poi.find(params[:poi_id])
+              
               if  update_poi
                 
                 #only update exist value
                 if params[:name].present?
                 update_poi.update(:name => params[:name])
                 end
-                if params[:fields].values_at.present?
+                if params[:fields].present?
                 update_poi.update(:fields => params[:fields])
                 end
                 if params[:poi_latitude].present?

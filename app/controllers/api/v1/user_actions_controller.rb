@@ -3,9 +3,10 @@ module Api
         class UserActionsController < ApplicationController
 
           def user_action
-            user =  UserAction.where(user_id: params[:id])
+            user =  UserAction.where(user_id: params[:user_id]) 
             json_response(
-              data: user
+              data: user,
+              message: "Success"
             )
           end
 
