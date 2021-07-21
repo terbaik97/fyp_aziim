@@ -32,7 +32,7 @@ module Api
             def update
               
               user = User.find_by(id: params[:id])
-              
+            
               if  user
                   if params[:email].present?
                     user.update(:email => params[:email])
@@ -45,6 +45,9 @@ module Api
                   end
                   if params[:avatar].present?
                     user.update(:avatar => params[:avatar])
+                  end
+                  if params[:user_point].present?
+                    user.update(:user_point => params[:user_point])
                   end
                   json_response(
                   data: user,
