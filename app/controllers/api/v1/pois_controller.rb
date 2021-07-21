@@ -1,7 +1,7 @@
 module Api
     module V1
         class PoisController < ApplicationController
-            skip_before_action :authorize_request, only: [:show,:show_version,:index,:show_coordinate,:show_poi]
+            skip_before_action :authorize_request, only: [:show,:show_version,:index,:show_coordinate,:show_poi,:event_poi]
             before_action :set_paper_trail_whodunnit
            
             def index
@@ -10,21 +10,15 @@ module Api
                  json_response(
                     data: poi
                   )
-              # if params.nil?
-              #   json_response(
-              #     data: "Please input place you want to find"
-              # )
-              # else
-              #   poi = Poi.find_by(:name => params[:name]);
-              #   json_response(
-              #       data: poi
-              #     )
-              # end
-              # find_poi_coordinate =Poi.by_distance(:origin => [params[:poi_latitude],params[:poi_longitude]])
-              # results = find_poi_coordinate.find_by(:name => params[:name])
-              # json_response(
-              #  data: find_poi_coordinate
-              # )
+              
+            end
+
+            def event_poi
+              # Book.where.not(title: nil)
+              poi = Poi.where.not(event: "");
+                 json_response(
+                    data: poi
+                  )
             end
 
             def create
@@ -34,6 +28,7 @@ module Api
                   :user_id => authorize_request.id ,
                   :name => params[:name] , 
                   :fields => params[:fields] ,
+                  :category => params[:category],
                   :poi_latitude => params[:poi_latitude ],
                   :poi_longitude => params[:poi_longitude],
                   :event => params[:event],
@@ -65,13 +60,14 @@ module Api
 
             def update
               update_poi = Poi.find(params[:poi_id])
+              # byebug
               if  update_poi
                 
-                # #only update exist value
+                #only update exist value
                 if params[:name].present?
                 update_poi.update(:name => params[:name])
                 end
-                if params[:fields].values_at.present?
+                if params[:fields].present?
                 update_poi.update(:fields => params[:fields])
                 end
                 if params[:poi_latitude].present?
@@ -85,6 +81,9 @@ module Api
                 end
                 if params[:event_date].present?
                   update_poi.update(:event_date => params[:event_date])
+                end
+                if params[:category].present?
+                  update_poi.update(:category => params[:category])
                 end
 
                 user_action = UserAction.new(action_user: "update", user_id: authorize_request.id , poi_id: update_poi.id)
@@ -107,7 +106,7 @@ module Api
                   )
               else
                 check_poi_exist = Poi.where(poi_latitude: params[:poi_latitude], poi_longitude: params[:poi_longitude]).exists?
-                
+               
                 if check_poi_exist
                   check_report_results = Poi.find_by(poi_latitude: params[:poi_latitude], poi_longitude: params[:poi_longitude],is_report: "1")
                   
@@ -124,7 +123,9 @@ module Api
                       })
                   else
                     live_widget = Poi.find_by(id: check_report_results.id)
+                    
                     live_widget.versions.length  
+                    # @check = live_widget.paper_trail.update_columns("event") 
                     
                     if live_widget.versions.length > 2
                     widget = live_widget.paper_trail.previous_version # => widget == live_widget.versions.last.reify
@@ -136,16 +137,6 @@ module Api
                       live_widget.destroy
                     
                     end
-                    # # CREATE FIRST TIME AND GOT ISSUE REVERT BACK TO NEW ONE
-                    # widget =  live_widget.paper_trail.next_version          # => widget == live_widget.versions.last.reify
-                     
-                    # render json: widget.versions.first
-
-
-                    # byebug
-                    # check_report_results = check_report_results.paper_trail.previous_version  # the widget as it was before the update
-                    # check_report_results.save                                                 # reverted
-                    # render json: check_report_results 
                     
                   end
                 else
@@ -154,16 +145,122 @@ module Api
               end
             end
 
+            def report_item_poi_version 
+           
+            
+              find_poi = Poi.find(params[:poi_id])  
+             
+              find_version_to_report = find_poi.versions.find_by(id: params[:id])
+              
+              if find_version_to_report
+                user = User.find_by(id: params[:whodunnit])
+                user.update(:user_point => user.user_point - 50)
+                find_version_to_report.destroy
+                json_response(
+                  message: "success report"
+                )
+              else
+                json_response(
+                  message: "cannot report"
+                )
+              end
+            end
+
+            def revert_item_poi_version 
+             
+              find_poi = Poi.find(params[:poi_id])
+              
+              find_version_to_revert = find_poi.versions.find_by(id: params[:id])
+              if find_version_to_revert
+                user = User.find_by(id: params[:whodunnit])
+                user.update(:user_point => user.user_point + 30)
+                
+                if  find_version_to_revert.object_changes['event'].present?
+                  find_poi.update(:event => find_version_to_revert.object_changes['event'][1] ? find_version_to_revert.object_changes['event'][1] : '')
+                end
+                if  find_version_to_revert.object_changes['name'].present?
+                  find_poi.update(:name => find_version_to_revert.object_changes['name'][1] ? find_version_to_revert.object_changes['name'][1] : '')
+                end
+                if  find_version_to_revert.object_changes['category'].present?
+                  find_poi.update(:category => find_version_to_revert.object_changes['category'][1] ? find_version_to_revert.object_changes['category'][1] : '')
+                end
+                if find_version_to_revert.object_changes['event_date'].present?
+                  find_poi.update(:event_date => find_version_to_revert.object_changes['event_date'][1] ? find_version_to_revert.object_changes['event_date'][1] : '')
+                end
+                if find_version_to_revert.object_changes['fields'].present?
+                  find_poi.update(:fields => find_version_to_revert.object_changes['fields'][1] ? find_version_to_revert.object_changes['fields'][1] : '')
+                end
+                
+                # find_version_to_revert.save
+               
+                json_response(
+                  
+                  message: "success revert"
+                )
+              else
+                json_response(
+                  message: "cannot revert"
+                )
+              end
+
+            end
+
+            def report_revert_item_poi_version_1
+             
+              find_poi = Poi.find(params[:poi_id])
+              
+              find_version_to_revert = find_poi.versions.find_by(id: params[:id])
+              if find_version_to_revert
+                user = User.find_by(id: params[:whodunnit])
+                user.update(:user_point => user.user_point - 30)
+                find_version_to_revert.destroy
+                find_poi.destroy
+                
+                json_response(  
+                  message: "success report and revert"
+                )
+              else
+                json_response(
+                  message: "cannot revert"
+                )
+              end
+
+            end
+
+
+
             def show_version 
              
               find_poi = Poi.find(params[:id])
+              image_poi =ImagePoi.find_by(poi_id: params[:id])
               results_user_action= Poi.find(params[:id])
               if find_poi
-                   render json:  find_poi.versions
+                   render json: find_poi.versions.to_json(
+                    :include => {
+                      :user => {
+                        only: [:full_name,:user_point]
+                      },
+                      
+                    })
+                    # json_response(
+                    #   data: {
+                    #     find_poi.versions.to_json(
+                    #     :include => {
+                    #       :user => {
+                    #         only: [:full_name,:user_point]
+                    #       },
+                          
+                    #     }),
+                    #     image_poi: image_poi
+                    #   }
+                    # )
+                    
               else
                 not_found(params[:name])
               end
             end
+
+
 
             def show_poi
               find_poi = Poi.find(params[:id])
@@ -176,8 +273,8 @@ module Api
 
             def search
               #  buat utk search
-                # find_poi_coordinate =Poi.by_distance(:origin => [params[:poi_latitude],params[:poi_longitude]])
-                # results = find_poi_coordinate.find_by(:name => params[:name])
+                find_poi_coordinate =Poi.by_distance(:origin => [params[:poi_latitude],params[:poi_longitude]])
+                results = find_poi_coordinate.find_by(:name => params[:name])
             end
             private
             def poi_params 
@@ -197,9 +294,9 @@ module Api
                   message: message
                 )  
             end
-            def user_for_paper_trail
-              current_user&.full_name || "Public User"
-            end
+            # def user_for_paper_trail
+            #   current_user&.full_name 
+            # end
         end
     end
 end
